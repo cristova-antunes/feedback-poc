@@ -8,7 +8,10 @@ interface FeedbackProviderProps {
 
 export interface FeedbackCtxProps {
   feedbackList: Feedback[] | null
+  feedbackEdit: Feedback | null
   addFeedback: (item: Feedback) => void
+  updateFeedback: (item: Feedback) => void
+  SetEditFeedback: (item: Feedback) => void
   deleteFeedback: (feedbackId: string) => void
 }
 
@@ -16,9 +19,24 @@ const FeedbackCtx = createContext<FeedbackCtxProps>({} as FeedbackCtxProps)
 
 export const FeedbackProvider = ({ children }: FeedbackProviderProps) => {
   const [feedbackList, setFeedbackList] = useState<Feedback[]>(FeedbackData)
+  const [feedbackEdit, setFeedbackEdit] = useState<Feedback | null>(null)
 
   const addFeedback = (item: Feedback) => {
     setFeedbackList((prev) => [item, ...prev])
+  }
+
+  const updateFeedback = (item: Feedback) => {
+    setFeedbackList((prev) => {
+      return prev.map((previous) =>
+        previous.id === item.id ? { ...item } : previous
+      )
+    })
+
+    setFeedbackEdit(null)
+  }
+
+  const SetEditFeedback = (item: Feedback) => {
+    setFeedbackEdit(item)
   }
 
   const deleteFeedback = (feedbackId: string) => {
@@ -26,7 +44,16 @@ export const FeedbackProvider = ({ children }: FeedbackProviderProps) => {
   }
 
   return (
-    <FeedbackCtx.Provider value={{ feedbackList, addFeedback, deleteFeedback }}>
+    <FeedbackCtx.Provider
+      value={{
+        feedbackList,
+        feedbackEdit,
+        addFeedback,
+        deleteFeedback,
+        updateFeedback,
+        SetEditFeedback,
+      }}
+    >
       {children}
     </FeedbackCtx.Provider>
   )

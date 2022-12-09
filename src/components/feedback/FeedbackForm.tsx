@@ -1,11 +1,11 @@
 import Picker from "../ui/Picker"
-import { useRef, useState, useContext, ChangeEvent } from "react"
+import { useRef, useEffect, useState, useContext, ChangeEvent } from "react"
 import { v4 as uuidv4 } from "uuid"
 import Card from "../ui/Card"
 import FeedbackCtx from "../../context/Feedback"
 
 function FeedbackForm() {
-  const { addFeedback } = useContext(FeedbackCtx)
+  const { addFeedback, feedbackEdit, updateFeedback } = useContext(FeedbackCtx)
 
   const nameRef = useRef<HTMLInputElement | null>(null)
   const feedbackRef = useRef<HTMLTextAreaElement | null>(null)
@@ -15,15 +15,33 @@ function FeedbackForm() {
     setPickerValue(curr)
   }
 
+  // Update form for edit content
+  useEffect(() => {
+    if (feedbackEdit != null) {
+      nameRef.current!.value = feedbackEdit.user
+      feedbackRef.current!.value = feedbackEdit.text
+      setPickerValue(feedbackEdit.rating)
+    }
+  }, [feedbackEdit])
+
   const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    addFeedback({
-      id: uuidv4(),
-      user: nameRef.current!.value,
-      text: feedbackRef.current!.value,
-      rating: pickerValue,
-    })
+    if (feedbackEdit) {
+      updateFeedback({
+        id: feedbackEdit.id,
+        user: nameRef.current!.value,
+        text: feedbackRef.current!.value,
+        rating: pickerValue,
+      })
+    } else {
+      addFeedback({
+        id: uuidv4(),
+        user: nameRef.current!.value,
+        text: feedbackRef.current!.value,
+        rating: pickerValue,
+      })
+    }
 
     nameRef.current!.value = ""
     feedbackRef.current!.value = ""

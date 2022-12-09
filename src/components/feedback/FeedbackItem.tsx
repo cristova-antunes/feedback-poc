@@ -9,7 +9,7 @@ interface FeedbackItemProps {
 }
 
 function FeedbackItem({ feedbackItem }: FeedbackItemProps) {
-  const { deleteFeedback } = useContext(FeedbackCtx)
+  const { deleteFeedback, SetEditFeedback } = useContext(FeedbackCtx)
 
   return (
     <Card>
@@ -18,7 +18,11 @@ function FeedbackItem({ feedbackItem }: FeedbackItemProps) {
           <p className="font-bold">{feedbackItem.user}</p>
         </div>
         <div className="flex gap-5">
-          <BsPencil size={20} className="text-pink-600 hover:text-pink-900" />
+          <BsPencil
+            size={20}
+            className="text-pink-600 hover:text-pink-900"
+            onClick={() => SetEditFeedback(feedbackItem)}
+          />
           <BsXLg
             size={20}
             className="text-pink-600 hover:text-pink-900"
