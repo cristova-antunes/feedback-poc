@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.App {
+  @apply flex flex-col h-screen;
+}
+
+main {
+  @apply bg-indigo-500 py-8 px-5 flex-1;
+}
+
+button,
+button[type="submit"] {
+  @apply bg-indigo-900 border text-gray-200 px-2 py-1 border-indigo-900 rounded-lg;
+}
+
+button[type="submit"] {
+  @apply block mt-6 w-fit mx-auto;
+}
+
+label:not(label:has(+ input[type="radio"])) {
+  @apply block text-sm text-gray-800 font-bold;
+}
+
+label + :is(input, textarea) {
+  @apply block mt-1 mb-5;
+}
+
+:is(input, textarea) {
+  @apply px-4 py-2 min-h-[40px];
+}
+
+.picker-form li:has(input:checked) {
+  @apply bg-pink-900;
+}
